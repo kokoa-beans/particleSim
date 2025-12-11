@@ -8,47 +8,15 @@
 #include <ctime>
 #include <iostream>
 
+#include "Vec3.h"
+#include "Body.h"
+
 constexpr double MY_PI = 3.14159265358979323846;
 double dt = 0.001;
 double worldRadius = 200;
 
-// -----------------------------------------------------------------------------
-// Simple Vec3
-struct Vec3 {
-    double x, y, z;
-
-    Vec3() : x(0), y(0), z(0) {}
-    Vec3(double X, double Y, double Z) : x(X), y(Y), z(Z) {}
-
-    Vec3 operator+(Vec3 const& o) const { return Vec3(x + o.x, y + o.y, z + o.z); }
-    Vec3 operator-(Vec3 const& o) const { return Vec3(x - o.x, y - o.y, z - o.z); }
-    Vec3 operator*(double s) const { return Vec3(x * s, y * s, z * s); }
-
-    Vec3& operator+=(Vec3 const& o) { x += o.x; y += o.y; z += o.z; return *this; }
-    Vec3& operator-=(Vec3 const& o) { x -= o.x; y -= o.y; z -= o.z; return *this; }
-
-};
-
-// -----------------------------------------------------------------------------
-// Simple Body
-struct Body {
-    Vec3 pos;
-    Vec3 vel;
-    Vec3 force;
-    double mass;
-
-    Body(double x, double y, double z, double vx, double vy, double vz, double m)
-        : pos(x, y, z), vel(vx, vy, vz), force(0, 0, 0), mass(m) {
-    }
-
-    void resetForce() { force = Vec3(0, 0, 0); }
-
-    void update(double dt) {
-        vel += force * (dt / mass);
-        pos += vel * dt;
-    }
-};
-
+/* 
+*/
 std::vector<Body> bodies;
 
 // camera spherical coords
