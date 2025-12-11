@@ -135,13 +135,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\GLAD_STUFF\src\glad.c" />
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Octree.cpp" />
-    <ClCompile Include="Vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Particle.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
