@@ -99,8 +99,8 @@ struct OctreeNode {
 			for (OctreeNode* checkingNode : nodes) {
 				if (checkingNode != nullptr) {
 					checkingNode->calculateCOM();
-					tempCenterOfMass += (checkingNode->centerOfMass) * mass;
-					totalMass += mass;
+					tempCenterOfMass += (checkingNode->centerOfMass) * checkingNode->mass;
+					totalMass += checkingNode->mass;
 				}
 			}
 

@@ -18,10 +18,10 @@ double worldRadius = 500;
 
 double octreeSize = 0.0;
 
-const double softening = 1e-4;
-const double G = 1;
+const double softening = 1e1;
+const double G = 1e1;
 
-const double errorConstant = 0.01;
+const double errorConstant = 0.5;
 
 std::vector<Body> bodies;
 Octree tree;
@@ -36,7 +36,7 @@ double camPhi = MY_PI / 2.0;
 
 
 void recurCalculateForce(OctreeNode* curNode, Body& body) {
-    if (curNode->isLeaf() && curNode->centerOfMass == body.pos) return;
+    if (curNode->isLeaf() && &curNode->thisBody == &body) return;
     
     double ratio = (curNode->boundingCube.width) / (Vec3::calcDistance(curNode->centerOfMass, body.pos));
     if (ratio < errorConstant || (curNode->isLeaf()) ) {
@@ -213,7 +213,7 @@ void display() {
         glEnd();
     }
 
-    octreeRecursiveDraw(tree.root);
+    //octreeRecursiveDraw(tree.root);
 
     glutSwapBuffers();
 }
@@ -243,7 +243,7 @@ void reshape(int w, int h) {
 // main
 int main(int argc, char** argv) {
 
-    int N = 10;
+    int N = 500;
     dt = 1e-1;
 
     std::srand(unsigned(std::time(nullptr)));
