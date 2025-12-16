@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <glad/glad.h> // Include glad for OpenGL functions
+#include <OpenGL_Libraries/Include/glad/glad.h>
 
 #include <string>
 #include <fstream>

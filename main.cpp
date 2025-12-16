@@ -1,7 +1,8 @@
 ﻿// NBodyNaive.cpp
-// Build: g++ -std=c++17 NBodyNaive.cpp -lGL -lGLU -lglut -o nbody_naive
 
-#include <GL/freeglut.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+
 #include <vector>
 #include <cmath>
 #include <cstdlib>
@@ -25,6 +26,8 @@ const double errorConstant = 0.5;
 
 int frameCount = 0;
 const int octreeFrameCount = 1;
+
+const double INFINITE = 1e100;
 
 std::vector<Body> bodies;
 Octree tree;
@@ -63,7 +66,7 @@ void drawString(float x, float y, float z, const char *string) {
 void drawFloat(float x, float y, float z, float number) {
     char buffer[40];
     // Format the float to two decimal places
-    sprintf_s(buffer, "%.2f", number);
+    sprintf(buffer, "%.2f", number);
     drawString(x, y, z, buffer);
 }
 
@@ -128,9 +131,7 @@ void computeNaiveForces() {
 
 void stepSimulation() {
     computeEfficientForces();
-    //computeNaiveForces();
-
-    int size = bodies.size();
+    // computeNaiveForces();
 
     for (auto& b : bodies) {
         b.update(dt);
