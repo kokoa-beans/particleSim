@@ -18,10 +18,13 @@ double worldRadius = 500;
 
 double octreeSize = 0.0;
 
-const double softening = 1e1;
+const double softening = 1e0;
 const double G = 1e1;
 
 const double errorConstant = 0.5;
+
+int frameCount = 0;
+const int octreeFrameCount = 1;
 
 std::vector<Body> bodies;
 Octree tree;
@@ -29,11 +32,40 @@ Octree tree;
 Body OctreeNode::defaultBodyPlaceholder = Body(INFINITE, INFINITE, INFINITE, INFINITE, INFINITE, INFINITE, INFINITE);
 
 
+//==============
+//All of the variables needed to keep track of the frames per second.
+double prevTime = 0;
+double currentTime = 0;
+
+int framesForFPS;
+
+float fps = 0.0;
+//================
+
+
+
+
 // camera spherical coords
 double camRadius = 500.0;
 double camTheta = 0.0;
 double camPhi = MY_PI / 2.0;
 
+void drawString(float x, float y, float z, const char *string) {
+    glRasterPos3f(x, y, z);
+
+    for (int i = 0; string[i] != '\0'; i++) {
+        char c = string[i];
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, c);
+    }
+}
+
+// Function to draw a float (example)
+void drawFloat(float x, float y, float z, float number) {
+    char buffer[40];
+    // Format the float to two decimal places
+    sprintf_s(buffer, "%.2f", number);
+    drawString(x, y, z, buffer);
+}
 
 void recurCalculateForce(OctreeNode* curNode, Body& body) {
     if (curNode->isLeaf() && &curNode->thisBody == &body) return;
@@ -100,11 +132,7 @@ void stepSimulation() {
 
     int size = bodies.size();
 
-    std::cout << "Size is " << size << std::endl;
-
-
     for (auto& b : bodies) {
-        std::cout << b.pos.toString() << std::endl;
         b.update(dt);
     }
 }
@@ -180,7 +208,6 @@ void octreeRecursiveDraw(OctreeNode* node) {
 
 
     for (OctreeNode* each : node->nodes) {
-        
         if (each != nullptr) octreeRecursiveDraw(each);
     }
 }
@@ -206,14 +233,29 @@ void display() {
     glDisable(GL_DEPTH_TEST);
     glColor3f(1, 1, 1);
 
+    glPointSize(5.0f);
+    glBegin(GL_POINTS);
     for (auto& b : bodies) {
-        glPointSize(5.0f);
-        glBegin(GL_POINTS);
         glVertex3d(b.pos.x, b.pos.y, b.pos.z);
-        glEnd();
     }
+    glEnd();
 
-    //octreeRecursiveDraw(tree.root);
+    
+    octreeRecursiveDraw(tree.root);
+
+
+
+    currentTime = glutGet(GLUT_ELAPSED_TIME);
+    framesForFPS++;
+
+    if (currentTime - prevTime >= 100) {
+        fps = framesForFPS * 100 / (currentTime - prevTime);
+
+        prevTime = currentTime;
+        framesForFPS = 0;
+    }
+    drawFloat(0, 0, 0, fps);
+    //drawString(0, 0, 0, "what the frick");
 
     glutSwapBuffers();
 }
@@ -223,9 +265,15 @@ void display() {
 // idle
 void idleFunc() {
     octreeSize = worldRadius * 10;
-    tree = Octree(bodies, octreeSize);
+
+    if (frameCount % octreeFrameCount == 0) {
+        tree = Octree(bodies, octreeSize);
+    }
+
     stepSimulation();
     glutPostRedisplay();
+
+    frameCount++;
 }
 
 // -----------------------------------------------------------------------------
@@ -243,7 +291,7 @@ void reshape(int w, int h) {
 // main
 int main(int argc, char** argv) {
 
-    int N = 500;
+    int N = 1000;
     dt = 1e-1;
 
     std::srand(unsigned(std::time(nullptr)));
@@ -255,12 +303,12 @@ int main(int argc, char** argv) {
         double y = (std::rand() / double(RAND_MAX)) * 2 * worldRadius - worldRadius;
         double z = (std::rand() / double(RAND_MAX)) * 2 * worldRadius - worldRadius;
 
-        double vx = (std::rand() * .5) - 1;
-        double vy = (std::rand() * .5) - 1;
-        double vz = (std::rand() * .5) - 1;
+        double vx = ((std::rand()/RAND_MAX * -.5) + 1);
+        double vy = ((std::rand()/RAND_MAX * -.5) + 1);
+        double vz = ((std::rand()/RAND_MAX * -.5) + 1);
 
 
-        bodies.emplace_back(x, y, z, 0, 0, 0, 10.0);
+        bodies.emplace_back(x, y, z, vx, vy, vz, 10.0);
     }
 
     glutInit(&argc, argv);

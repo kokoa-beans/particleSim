@@ -145,6 +145,7 @@
     <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="nbody.comp" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
   </ItemGroup>

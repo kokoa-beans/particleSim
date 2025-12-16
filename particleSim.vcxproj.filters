@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Shader Files">
       <UniqueIdentifier>{155cf069-6585-4c3a-b90d-d7b18838db25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{0f89a7c3-9db4-4b1c-bbe3-5057686f726f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,6 +51,9 @@
     </None>
     <None Include="shader.fs">
       <Filter>Header Files\Shader Files</Filter>
+    </None>
+    <None Include="nbody.comp">
+      <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>
 </Project>
